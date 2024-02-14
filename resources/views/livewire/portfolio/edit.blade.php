@@ -14,7 +14,8 @@
                     <div class="flex flex-wrap mb-4">
                         <div class="w-full md:w-3/4 p-4">
                             <div class="sm:col-span-3 mb-4">
-                                <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Título</label>
+                                <label for="title"
+                                       class="block text-sm font-medium leading-6 text-gray-900">Título</label>
                                 <div class="mt-2">
                                     <input type="text" wire:model="title" id="title" autocomplete="given-name"
                                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -25,15 +26,29 @@
                                 </div>
                             </div>
 
-                            <div class="sm:col-span-3">
+                            <div class="mt-2 bg-white" wire:ignore>
                                 <label for="description"
                                        class="block text-sm font-medium leading-6 text-gray-900">Descripción</label>
-                                <div class="mt-2" wire:ignore>
-                                    <div id="{{ $quillId }}" wire:ignore></div>
+                                <div class="mt-2">
+
+                                    <div
+                                        x-data
+                                        x-ref="quillEditor"
+                                        x-init="
+                                     quill = new Quill($refs.quillEditor, {theme: 'snow'});
+                                     quill.on('text-change', function () {
+                                       @this.set('description', quill.root.innerHTML)
+                                     });
+                                   "
+                                        wire:model.debounce.2000ms="description"
+                                    >
+                                        {!! $description !!}
+                                    </div>
                                 </div>
 
                                 <div>
-                                    @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                    @error('description') <span
+                                        class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
@@ -43,7 +58,8 @@
                                 <div class="flex items-center justify-start" x-data="{enabled: @js($published)}">
                                     <button @click="enabled = !enabled" type="button" wire:click="enabledPublished"
                                             class="bg-gray-200 relative inline-flex flex-shrink-0 h-5 w-10 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                            :class="enabled &amp;&amp; 'bg-indigo-600'" role="switch" aria-checked="false">
+                                            :class="enabled &amp;&amp; 'bg-indigo-600'" role="switch"
+                                            aria-checked="false">
                                         <span class="sr-only">Sleek Toggle</span>
                                         <span aria-hidden="true"
                                               class="pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
@@ -55,21 +71,32 @@
 
                             <div class="col-span-full">
                                 <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Imágen</label>
-                                @if($image)
-                                    <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 p-1">
+
+                                @if($image_prev || $image)
+                                    <div
+                                        class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 p-1">
                                         <div class="text-center relative">
-                                            <button type="button" wire:click="cleanImage" class="absolute top-2 right-2 ml-2 inline-flex items-center px-2 py-1 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                            <button type="button" wire:click="cleanImage"
+                                                    class="absolute top-2 right-2 ml-2 inline-flex items-center px-2 py-1 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                     stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                          d="M6 18 18 6M6 6l12 12"/>
                                                 </svg>
                                             </button>
-                                            <img src="{{ $image->temporaryUrl() }}" class="rounded">
+                                            @if($image_prev)
+                                                <img src="{{ $image_prev->temporaryUrl() }}" class="rounded">
+                                            @else
+                                                <img src="{{ asset('storage/'.$image) }}" alt="">
+                                            @endif
                                         </div>
                                     </div>
                                 @else
-                                    <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div
+                                        class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                                         <div class="text-center">
-                                            <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor"
+                                            <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24"
+                                                 fill="currentColor"
                                                  aria-hidden="true">
                                                 <path fill-rule="evenodd"
                                                       d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
@@ -79,17 +106,18 @@
                                                 <label for="file-upload"
                                                        class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
                                                     <span>Upload a file</span>
-                                                    <input id="file-upload" wire:model="image" type="file" class="sr-only">
+                                                    <input id="file-upload" wire:model="image_prev" type="file"
+                                                           class="sr-only">
                                                 </label>
                                                 <p class="pl-1">or drag and drop</p>
                                             </div>
                                             <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
                                         </div>
                                     </div>
-                                    <div>
-                                        @error('image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
                                 @endif
+                                <div>
+                                    @error('image_prev') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -124,21 +152,4 @@
 
 @push('scripts')
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-    <script>
-        const quill = new Quill('#{{ $quillId }}', {
-            theme: 'snow'
-        });
-
-        quill.on('text-change', function () {
-            let value = document.getElementsByClassName('ql-editor')[0].innerHTML;
-            @this.set('description', value)
-        })
-    </script>
-
-    <script>
-        addEventListener("trix-blur", function(event) {
-        @this.set('description', trixEditor.getAttribute('value'))
-        })
-    </script>
 @endpush

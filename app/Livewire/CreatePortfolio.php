@@ -16,6 +16,7 @@ class CreatePortfolio extends Component
 
     #[Validate('required|min:5|max:1000')]
     public string $description;
+
     public bool $published = false;
 
     #[Validate('required|image|max:5000')]
@@ -28,6 +29,11 @@ class CreatePortfolio extends Component
         $this->quillId = 'quill-'.uniqid();
     }
 
+    public function updated($property)
+    {
+        $this->validateOnly($property);
+    }
+
     public function updatedDescription($value): void
     {
         $this->description = $value;
@@ -37,17 +43,25 @@ class CreatePortfolio extends Component
     {
         $this->validate();
 
-        $this->image = $this->image->store(path: 'photos');
+        $name = md5($this->image . microtime()).'.'.$this->image->extension();
+
+        $this->image = $this->image->storeAs('photos', $name, 'public');
 
         Portfolio::create($this->only('title', 'description', 'published', 'image'));
 
+        session()->flash('status', 'El portafolio de guardo correctamente');
+
         return $this->redirect('/portfolios');
+    }
+
+    public function cleanImage(): void
+    {
+        $this->image = '';
     }
 
     public function enabledPublished()
     {
         $this->published = !$this->published;
-        logger()->info('enabledPublished!!! => '. print_r(!$this->published, 1));
     }
 
     public function render()

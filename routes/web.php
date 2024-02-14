@@ -25,9 +25,10 @@ Route::view('profile', 'profile')
 
 require __DIR__.'/auth.php';
 
-Route::group(['prefix' => 'portfolios', 'as' => 'portfolio'], function() {
-    Route::get('/', function() {
-        return 'Lista de portafolios';
-    })->name('index');
+Route::group(['prefix' => 'portfolios', 'as' => 'portfolio.'], function() {
+    Route::get('/', \App\Livewire\Portfolio\Read::class)->name('index');
+
     Route::get('/create', \App\Livewire\CreatePortfolio::class)->name('create');
+
+    Route::get('/{portfolio}/edit', \App\Livewire\Portfolio\Edit::class)->name('edit');
 });
