@@ -2,11 +2,10 @@
 
 namespace App\Livewire\Portfolio;
 
-use App\Livewire\Portfolio;
 use App\Models\Portfolio as ModelPortfolio;
 use Livewire\Component;
 
-class Read extends Component
+class Index extends Component
 {
     public $portfolio;
     public $perPage = 10;
@@ -27,7 +26,7 @@ class Read extends Component
 
     public function render()
     {
-        return view('livewire.portfolio.read', [
+        return view('livewire.portfolio.index', [
             'portfolios' => ModelPortfolio::search($this->search)->orderBy('created_at', 'desc')->paginate($this->perPage)
         ])->layout('layouts.main');
     }

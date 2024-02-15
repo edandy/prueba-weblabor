@@ -1,5 +1,10 @@
 <?php
 
+use App\Livewire\Portfolio\Create;
+use App\Livewire\Portfolio\Edit;
+use App\Livewire\Portfolio\Home;
+use App\Livewire\Portfolio\Index;
+use App\Livewire\Portfolio\Read;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'welcome');
+Route::get('/', Home::class)->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -25,10 +30,10 @@ Route::view('profile', 'profile')
 
 require __DIR__.'/auth.php';
 
-Route::group(['prefix' => 'portfolios', 'as' => 'portfolio.'], function() {
-    Route::get('/', \App\Livewire\Portfolio\Read::class)->name('index');
+Route::group(['prefix' => 'portfolios', 'middleware' => 'auth', 'as' => 'portfolio.'], function() {
+    Route::get('/', Index::class)->name('index');
 
-    Route::get('/create', \App\Livewire\CreatePortfolio::class)->name('create');
+    Route::get('/create', Create::class)->name('create');
 
-    Route::get('/{portfolio}/edit', \App\Livewire\Portfolio\Edit::class)->name('edit');
+    Route::get('/{portfolio}/edit', Edit::class)->name('edit');
 });

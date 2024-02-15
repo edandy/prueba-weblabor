@@ -40,7 +40,7 @@
 
                         <div class="w-full md:w-1/4 p-4">
                             <div class="mb-4">
-                                <div class="flex items-center justify-start" x-data="{enabled: @js($published)}">
+                                <div class="flex items-center justify-start" x-data="{enabled: @js($is_published)}">
                                     <button @click="enabled = !enabled" type="button" wire:click="enabledPublished"
                                             class="bg-gray-200 relative inline-flex flex-shrink-0 h-5 w-10 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                             :class="enabled &amp;&amp; 'bg-indigo-600'" role="switch" aria-checked="false">
@@ -55,7 +55,7 @@
 
                             <div class="col-span-full">
                                 <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Imágen</label>
-                                @if($image)
+                                @if($thumbnail)
                                     <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 p-1">
                                         <div class="text-center relative">
                                             <button type="button" wire:click="cleanImage" class="absolute top-2 right-2 ml-2 inline-flex items-center px-2 py-1 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
@@ -63,7 +63,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                                 </svg>
                                             </button>
-                                            <img src="{{ $image->temporaryUrl() }}" class="rounded">
+                                            <img src="{{ $thumbnail->temporaryUrl() }}" class="rounded">
                                         </div>
                                     </div>
                                 @else
@@ -79,7 +79,7 @@
                                                 <label for="file-upload"
                                                        class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
                                                     <span>Upload a file</span>
-                                                    <input id="file-upload" wire:model="image" type="file" class="sr-only">
+                                                    <input id="file-upload" wire:model="thumbnail" type="file" accept="image/*" class="sr-only">
                                                 </label>
                                                 <p class="pl-1">or drag and drop</p>
                                             </div>
@@ -87,7 +87,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        @error('image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                        @error('thumbnail') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                     </div>
                                 @endif
                             </div>
@@ -132,7 +132,7 @@
 
         quill.on('text-change', function () {
             let value = document.getElementsByClassName('ql-editor')[0].innerHTML;
-            @this.set('description', value)
+        @this.set('description', value)
         })
     </script>
 

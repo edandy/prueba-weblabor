@@ -11,7 +11,7 @@ class Portfolio extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['title', 'description', 'image', 'published'];
+    protected $fillable = ['title', 'description', 'thumbnail', 'is_published'];
 
     public static function search($search)
     {

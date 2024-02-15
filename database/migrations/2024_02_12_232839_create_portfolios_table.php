@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->string('image')->nullable();
-            $table->boolean('published')->default(0);
+            $table->string('thumbnail')->nullable();
+            $table->boolean('is_published')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

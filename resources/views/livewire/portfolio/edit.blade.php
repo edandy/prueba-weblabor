@@ -55,7 +55,7 @@
 
                         <div class="w-full md:w-1/4 p-4">
                             <div class="mb-4">
-                                <div class="flex items-center justify-start" x-data="{enabled: @js($published)}">
+                                <div class="flex items-center justify-start" x-data="{enabled: @js($is_published)}">
                                     <button @click="enabled = !enabled" type="button" wire:click="enabledPublished"
                                             class="bg-gray-200 relative inline-flex flex-shrink-0 h-5 w-10 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                             :class="enabled &amp;&amp; 'bg-indigo-600'" role="switch"
@@ -71,8 +71,7 @@
 
                             <div class="col-span-full">
                                 <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Imágen</label>
-
-                                @if($image_prev || $image)
+                                @if($image_prev || $thumbnail)
                                     <div
                                         class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 p-1">
                                         <div class="text-center relative">
@@ -87,7 +86,7 @@
                                             @if($image_prev)
                                                 <img src="{{ $image_prev->temporaryUrl() }}" class="rounded">
                                             @else
-                                                <img src="{{ asset('storage/'.$image) }}" alt="">
+                                                <img src="{{ asset('storage/'.$thumbnail) }}" alt="">
                                             @endif
                                         </div>
                                     </div>
@@ -106,7 +105,7 @@
                                                 <label for="file-upload"
                                                        class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
                                                     <span>Upload a file</span>
-                                                    <input id="file-upload" wire:model="image_prev" type="file"
+                                                    <input id="file-upload" wire:model="image_prev" type="file" accept="image/*"
                                                            class="sr-only">
                                                 </label>
                                                 <p class="pl-1">or drag and drop</p>

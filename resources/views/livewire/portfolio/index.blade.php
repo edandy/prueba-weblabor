@@ -27,11 +27,19 @@
                         <li>
                             <div class="px-4 py-4 sm:px-6">
                                 <div class="mt-2 flex justify-between">
-                                    <div class="sm:flex">
+                                    <div class="">
                                         <x-nav-link :href="route('portfolio.edit', $row->id)"
-                                                    class="truncate text-sm font-medium text-indigo-600">
+                                                    class="truncate font-medium text-indigo-600 mb-1">
                                             {{ $row->title }}
                                         </x-nav-link>
+
+                                        <div class="text-sm">
+                                            @if($row->is_published)
+                                            <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Publicado</span>
+                                            @else
+                                            <span class="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">Borrador</span>
+                                            @endif
+                                        </div>
                                     </div>
                                     <div class="flex items-center text-sm gap-2">
                                         <x-nav-link :href="route('portfolio.edit', $row->id)"
@@ -49,7 +57,7 @@
                                             x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
                                             wire:click="setPortfolio({{$row}})"
                                             type="button"
-                                                class="inline-flex items-center px-2 py-1 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                            class="inline-flex items-center px-2 py-1 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                  stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                                 <path stroke-linecap="round" stroke-linejoin="round"

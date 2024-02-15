@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Portfolio;
 
 use App\Models\Portfolio;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class CreatePortfolio extends Component
+class Create extends Component
 {
     use WithFileUploads;
 
@@ -17,10 +17,10 @@ class CreatePortfolio extends Component
     #[Validate('required|min:5|max:1000')]
     public string $description;
 
-    public bool $published = false;
+    public bool $is_published = false;
 
     #[Validate('required|image|max:5000')]
-    public $image;
+    public $thumbnail;
 
     public $quillId;
 
@@ -43,29 +43,29 @@ class CreatePortfolio extends Component
     {
         $this->validate();
 
-        $name = md5($this->image . microtime()).'.'.$this->image->extension();
+        $name = md5($this->thumbnail . microtime()).'.'.$this->thumbnail->extension();
 
-        $this->image = $this->image->storeAs('photos', $name, 'public');
+        $this->thumbnail = $this->thumbnail->storeAs('thumbnails', $name, 'public');
 
-        Portfolio::create($this->only('title', 'description', 'published', 'image'));
+        Portfolio::create($this->only('title', 'description', 'is_published', 'thumbnail'));
 
-        session()->flash('status', 'El portafolio de guardo correctamente');
+        session()->flash('status', 'El portafolio se creo correctamente');
 
         return $this->redirect('/portfolios');
     }
 
     public function cleanImage(): void
     {
-        $this->image = '';
+        $this->thumbnail = '';
     }
 
-    public function enabledPublished()
+    public function enabledPublished(): void
     {
-        $this->published = !$this->published;
+        $this->is_published = !$this->is_published;
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('livewire.create-portfolio')->layout('layouts.main');
+        return view('livewire.portfolio.create')->layout('layouts.main');
     }
 }

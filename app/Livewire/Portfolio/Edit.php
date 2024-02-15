@@ -15,9 +15,9 @@ class Edit extends Component
 
     public string $description;
 
-    public bool $published = false;
+    public bool $is_published = false;
 
-    public $image;
+    public $thumbnail;
     #[Validate('required|image|max:5000')]
     public $image_prev;
     public $quillId;
@@ -29,19 +29,19 @@ class Edit extends Component
         $this->title = $portfolio->title;
         $this->description = $portfolio->description;
         $this->published = $portfolio->published;
-        $this->image = $portfolio->image;
+        $this->thumbnail = $portfolio->thumbnail;
         $this->image_prev = $portfolio->image_prev;
         $this->quillId = 'quill-'.uniqid();
     }
 
     public function cleanImage(): void
     {
-        $this->image = '';
+        $this->thumbnail = '';
     }
 
     public function enabledPublished(): void
     {
-        $this->published = !$this->published;
+        $this->is_published = !$this->is_published;
     }
 
 
@@ -52,21 +52,21 @@ class Edit extends Component
             'description' => 'required|min:5|max:1000',
         ];
 
-        if(!$this->image) {
+        if(!$this->thumbnail) {
             $rules['image_prev'] = 'required|image|max:5000';
         }
 
         $validated = $this->validate($rules);
 
         if($this->image_prev) {
-            $name = md5($this->image . microtime()).'.'.$this->image_prev->extension();
+            $name = md5($this->thumbnail . microtime()).'.'.$this->image_prev->extension();
 
-            $this->image = $this->image_prev->storeAs('photos', $name, 'public');
+            $this->thumbnail = $this->image_prev->storeAs('thumbnails', $name, 'public');
         }
 
-        $this->portfolio->update($this->only('title', 'description', 'published', 'image'));
+        $this->portfolio->update($this->only('title', 'description', 'is_published', 'thumbnail'));
 
-        session()->flash('status', 'El portafolio de guardo correctamente');
+        session()->flash('status', 'El portafolio de actualizo correctamente');
 
         return $this->redirect('/portfolios');
     }
