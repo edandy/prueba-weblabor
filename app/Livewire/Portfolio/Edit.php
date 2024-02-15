@@ -28,7 +28,7 @@ class Edit extends Component
         $this->portfolio = $portfolio;
         $this->title = $portfolio->title;
         $this->description = $portfolio->description;
-        $this->published = $portfolio->published;
+        $this->is_published = $portfolio->is_published;
         $this->thumbnail = $portfolio->thumbnail;
         $this->image_prev = $portfolio->image_prev;
         $this->quillId = 'quill-'.uniqid();
